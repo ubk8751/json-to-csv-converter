@@ -1,0 +1,14 @@
+*{
+    background-color: black;
+}
+.options{
+    background-color: mediumaquamarine;
+    margin: auto;
+}
+
+button{
+    height: 80%;
+    width: 40%;
+    margin: 10%;
+}
+
