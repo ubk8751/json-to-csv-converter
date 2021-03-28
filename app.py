@@ -4,8 +4,6 @@ import json
 import requests
 import csv
 
-file_exist = False
-
 app = Flask(__name__)
 
 # Get the relevant items and data and return as a dictionary
@@ -58,12 +56,43 @@ def export_to_json(items):
     except IOError:
         print("I/O error")
 
+def get_json_from_link(link):
+    # Get the last word
+    temp = link.split("/")
+
+    e = temp[-1]
+
+    # Check if the link ends with data.json
+    if e == "data.json":
+        # Get the requests file using requests.
+        request = requests.get(link)
+        
+        # If the adress works, convert the requests file into a json file.
+        if request.status_code == 200:
+            items = request.json()
+
+            # Return our json file
+            return items
+
+def get_json_from_file(path):
+    try:
+        ext = path.split(".")
+
+        if ext[-1] == "json":
+            data = json.load(path)
+            return data
+        else:
+            print("Wrong file type!")
+    
+    except IOError:
+        print("I/O Error!")
+
 @app.route("/", methods=["POST","GET"])
 def index():
     if request.method == "POST":
         if request.form['route'] == "link":
             return redirect(url_for("if_link"))
-        if request.form['route'] == "file":
+        elif request.form['route'] == "file":
             return redirect(url_for("if_file"))
         else:
             return render_template("index.html")
@@ -73,33 +102,34 @@ def index():
 # Route for getting a json file using a link, sort it and export as Json or CSV
 @app.route("/link", methods=["POST","GET"])
 def if_link():
-    # Get the requests file using requests.
-    request = requests.get("https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/13.199167/lat/55.708333/data.json")
+    # Get the link from the app
+    weather_link = request.args.get("weather_link", "")
     
-    # If the adress works, convert the requests file into a json file.
-    if request.status_code == 200:
-        items = request.json()
+    if weather_link:
+        items = get_json_from_link(weather_link)
 
-        # Return our json file
-        return items
+        sorted_items = create_dict(items)
+
+        if request.method == "POST":
+            if request.form["option"] == "CSV":
+                export_to_csv(sorted_items)
+                return render_template("link.html", weather_link = weather_link, items = sorted_items)
+            elif request.form["option"] == "Json":
+                export_to_json(sorted_items)
+                return render_template("link.html", weather_link = weather_link, items = sorted_items)
+            else:
+                return render_template("link.html", weather_link = weather_link, items = sorted_items)
+        else:
+                return render_template("link.html", weather_link = weather_link, items = sorted_items) 
 
 # Route for reading a json file, sort it and export as Json or CSV
 @app.route("/file", methods=["POST","GET"])
 def if_file():
-    # Define the path to the file
-    path = "smhi_data.json"
-    
-    # Get the file
-    try:
-        f = open(path)
-        dct = json.load(f)
-        f.close()
-    
-        # Return the Json file
-        return dct
-    
-    except:
-        print("There was an error in loading the file!")
+    path = ""
+    items = get_json_from_file(path)
+    sorted_items = create_dict(items)
+    file_name = "smhi_data.json"
+    return render_template("file.html", items = sorted_items, file_name = file_name)
 
 '''def main():
         

@@ -4,9 +4,13 @@
 .options{
     background-color: mediumaquamarine;
     margin: auto;
+    height: 40%;
+    width: 40%;
+    float: center;
 }
 
 button{
+    background-color: darkturquoise;
     height: 80%;
     width: 40%;
     margin: 10%;
