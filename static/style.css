@@ -1,6 +1,12 @@
 *{
     background-color: black;
 }
+
+p
+{
+    color: azure;
+}
+
 .buttons{
     background-color: mediumaquamarine;
     margin: auto;
@@ -16,7 +22,31 @@
     margin: 10%;
 }
 
-p
+.linkbox
 {
-    color: azure;
+    display: table-cell;
+    vertical-align: middle;
 }
+
+.tb
+{
+    display: table;
+    width: 100%;
+}
+
+#s-circle
+{
+    position: relative;
+    top: -8px;
+    left: 0;
+    width: 43px;
+    height: 43px;
+    margin-top: 0;
+    border-width: 15px;
+    border: 15px solid #fff;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: 0.5s ease all;
+}
+
+
