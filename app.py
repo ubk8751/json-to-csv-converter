@@ -1,9 +1,17 @@
+'''
+By:     Samuel Jonsson
+        Blekinge Tekniska Högskola
+Date:   2021-03-28
+Email:  ubk8751@gmail.com
+'''
+
 # Import all the goodies
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 import json
 import requests
 import csv
 
+# Necessary Flask code
 app = Flask(__name__)
 
 # Get the relevant items and data and return as a dictionary
@@ -61,9 +69,10 @@ def get_json_from_link(link):
     temp = link.split("/")
 
     e = temp[-1]
+    s = temp[2]
 
     # Check if the link ends with data.json
-    if e == "data.json":
+    if e == "data.json" and s == "opendata-download-metfcst.smhi.se":
         # Get the requests file using requests.
         request = requests.get(link)
         
@@ -73,6 +82,8 @@ def get_json_from_link(link):
 
             # Return our json file
             return items
+    else:
+        print("Check your address please!")
 
 def get_json_from_file(path):
     try:
@@ -89,65 +100,42 @@ def get_json_from_file(path):
 
 @app.route("/", methods=["POST","GET"])
 def index():
-    if request.method == "POST":
-        if request.form['route'] == "link":
-            return redirect(url_for("if_link"))
-        elif request.form['route'] == "file":
-            return redirect(url_for("if_file"))
-        else:
-            return render_template("index.html")
-    else:
-        return render_template("index.html")
+    return render_template("index.html")
 
 # Route for getting a json file using a link, sort it and export as Json or CSV
 @app.route("/link", methods=["POST","GET"])
 def if_link():
-    # Get the link from the app
-    weather_link = request.args.get("weather_link", "")
-    
-    if weather_link:
-        items = get_json_from_link(weather_link)
+    if request.method == "POST":
+        # Get the link from the app
+        weather_link = request.args.get("weather_link", "")
+        
+        if weather_link:
+            items = get_json_from_link(weather_link)
 
-        sorted_items = create_dict(items)
+            sorted_items = create_dict(items)
 
-        if request.method == "POST":
-            if request.form["option"] == "CSV":
-                export_to_csv(sorted_items)
-                return render_template("link.html", weather_link = weather_link, items = sorted_items)
-            elif request.form["option"] == "Json":
-                export_to_json(sorted_items)
-                return render_template("link.html", weather_link = weather_link, items = sorted_items)
+            if request.method == "POST":
+                if request.form["option"] == "CSV":
+                    export_to_csv(sorted_items)
+                    return render_template("link.html", weather_link = weather_link, items = sorted_items)
+                elif request.form["option"] == "Json":
+                    export_to_json(sorted_items)
+                    return render_template("link.html", weather_link = weather_link, items = sorted_items)
+                else:
+                    return render_template("link.html", weather_link = weather_link, items = sorted_items)
             else:
-                return render_template("link.html", weather_link = weather_link, items = sorted_items)
-        else:
-                return render_template("link.html", weather_link = weather_link, items = sorted_items) 
+                    return render_template("link.html", weather_link = weather_link, items = sorted_items)
+    else:
+        return render_template("link.html")
 
 # Route for reading a json file, sort it and export as Json or CSV
 @app.route("/file", methods=["POST","GET"])
 def if_file():
-    path = ""
+    '''path = ""
     items = get_json_from_file(path)
     sorted_items = create_dict(items)
-    file_name = "smhi_data.json"
-    return render_template("file.html", items = sorted_items, file_name = file_name)
+    file_name = "smhi_data.json"'''
+    return render_template("file.html") #, items = sorted_items, file_name = file_name
 
-'''def main():
-        
-        if file_exist:
-            items = if_file()
-        else:
-            items = if_link()
-        
-        # Sort the dict and only take the information we need
-        sorted_items = create_dict(items)
-
-        # Export dict as json file
-        export_to_json(sorted_items)
-
-        # Export dict as csv file
-        export_to_csv(sorted_items)
-
-        print("Done")'''
-
-'''if __name__ == "__main__":
-    main()'''
+if __name__ == "__main__":
+    app.run(debug=True,port=5000)

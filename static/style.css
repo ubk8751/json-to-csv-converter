@@ -1,7 +1,7 @@
 *{
     background-color: black;
 }
-.options{
+.buttons{
     background-color: mediumaquamarine;
     margin: auto;
     height: 40%;
@@ -9,10 +9,14 @@
     float: center;
 }
 
-button{
+.button{
     background-color: darkturquoise;
     height: 80%;
     width: 40%;
     margin: 10%;
 }
 
+p
+{
+    color: azure;
+}
