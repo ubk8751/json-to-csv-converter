@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Create through link</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='link_style.css') }}">
+
+</head>
+<body>
+    <div id="cover">
+        <form method="get" action="">
+          <div class="tb">
+            <div class="td"><input type="text" name="weather_url" value="{{ weather_url }}" placeholder="Search" required></div>
+            <div class="td" id="s-cover">
+              <button type="submit" value="Create">
+                <div id="s-circle"></div>
+                <span></span>
+              </button>
+            </div>
+          </div>
+        </form>
+    </div>
+    <form action="#" method="POST">
+        <div class="dropdown dropdown-dark">
+          <select name="choise" class="dropdown-select">
+            <option value="">Select…</option>
+            <option  value="csv">CSV</option>
+            <option  value="Json">Json</option>
+          </select>
+        </div>
+        <div class="input_div">
+          <input class="send" type="submit" value="submit">
+        </div>
+    </form>
+    <div class="res_box">
+        {% if weather_url %}
+          <style>
+            div.res_box
+            {
+              visibility: visible;
+            }
+          </style>
+            <p>
+              Searched URL:
+              <h2 class="url"> {{ weather_url }}</h2>
+            </p>
+            
+            <p class="p_img">Result</p>
+            <p class="p_img">{{ status }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

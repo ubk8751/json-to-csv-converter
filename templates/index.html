@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index_style.css') }}">
+
+</head>
+<body>
+    <section class="container">
+        <form action="#" method="POST">
+          <p>What would you like to do?</p>
+          <div class="dropdown dropdown-dark">
+            <select name="route" class="dropdown-select">
+              <option value="">Select…</option>
+              {% for option in options %}
+              <option  value="{{ option }}">{{ option }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="input_div">
+            <input class="send" type="submit" value="submit">
+          </div>
+        </form>
+    </section>
+</body>
+</html>
