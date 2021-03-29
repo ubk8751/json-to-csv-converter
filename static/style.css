@@ -1,10 +1,21 @@
-*{
-    background-color: black;
+*
+{
+    background-color: burlywood;
+}
+
+button
+{
+    color: blanchedalmond;
 }
 
 p
 {
-    color: azure;
+    background-color: azure;
+}
+
+h2
+{
+    color: blanchedalmond;
 }
 
 .buttons{
@@ -26,6 +37,7 @@ p
 {
     display: table-cell;
     vertical-align: middle;
+    color: blanchedalmond;
 }
 
 .tb

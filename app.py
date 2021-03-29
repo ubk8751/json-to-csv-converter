@@ -105,6 +105,8 @@ def index():
 # Route for getting a json file using a link, sort it and export as Json or CSV
 @app.route("/link", methods=["POST","GET"])
 def if_link():
+    weather_link = ""
+    
     if request.method == "POST":
         # Get the link from the app
         weather_link = request.args.get("weather_link", "")
@@ -125,8 +127,8 @@ def if_link():
                     return render_template("link.html", weather_link = weather_link, items = sorted_items)
             else:
                     return render_template("link.html", weather_link = weather_link, items = sorted_items)
-    else:
-        return render_template("link.html")
+    
+    return render_template("link.html")
 
 # Route for reading a json file, sort it and export as Json or CSV
 @app.route("/file", methods=["POST","GET"])
